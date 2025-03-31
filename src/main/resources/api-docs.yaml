@@ -1,0 +1,271 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /restaurante/platos/{id}:
+    get:
+      tags:
+      - platos-controller-impl
+      summary: Obtener el plato por su Id
+      operationId: getPlatosById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Plato"
+    put:
+      tags:
+      - platos-controller-impl
+      summary: Actualizar el plato por su id
+      operationId: updatePlato
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Plato"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - platos-controller-impl
+      summary: Borrar el plato por su id
+      operationId: deletePlato
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+  /restaurante/locales/{cif}:
+    get:
+      tags:
+      - locales-controller-impl
+      summary: Local elegido por su CIF
+      operationId: getLocalByCif
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Local"
+    put:
+      tags:
+      - locales-controller-impl
+      summary: Creando local a partir de su CIF
+      operationId: createOrUpdateLocal
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Local"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+      - locales-controller-impl
+      summary: Eliminando local a partir de su CIF
+      operationId: deleteLocal
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /restaurante/platos:
+    get:
+      tags:
+      - platos-controller-impl
+      summary: Listado de platos
+      operationId: getPlatos
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plato"
+    post:
+      tags:
+      - platos-controller-impl
+      summary: Crear el plato
+      operationId: createPlato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Plato"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /restaurante/locales/{cif}/platos:
+    get:
+      tags:
+      - locales-controller-impl
+      summary: Listado de platos
+      operationId: getPlatos_1
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Plato"
+    post:
+      tags:
+      - locales-controller-impl
+      summary: Creando plato en el local segun el cif
+      operationId: addPlato
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int32
+        required: true
+      responses:
+        "200":
+          description: OK
+  /restaurante/locales:
+    get:
+      tags:
+      - locales-controller-impl
+      summary: Listado de locales
+      operationId: getLocales
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Local"
+  /restaurante/locales/{cif}/platos/{plato}:
+    delete:
+      tags:
+      - locales-controller-impl
+      summary: Eliminando el plato del restaurante segun su cif
+      operationId: removePlato
+      parameters:
+      - name: cif
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: plato
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    Plato:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Id del plato
+        nombre:
+          type: string
+          description: Nombre del plato
+        precio:
+          type: number
+          format: double
+          description: Precio del plato
+        categoria:
+          type: string
+          description: Categoria del plato
+          enum:
+          - Entrante
+          - Plato principal
+          - Postre
+    Local:
+      type: object
+      properties:
+        cif:
+          type: string
+          description: Codigo identificativo del local
+        nombre:
+          type: string
+          description: Nombre restaurante
+        direccion:
+          type: string
+          description: Direccion restaurante
+        telefono:
+          type: string
+          description: Telefono restaurante
+        carta:
+          type: array
+          description: Carta restaurante
+          items:
+            $ref: "#/components/schemas/Plato"
