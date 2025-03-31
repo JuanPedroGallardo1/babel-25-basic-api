@@ -3,6 +3,8 @@ package com.helloworld.babel.restaurant.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class Plato {
 
@@ -37,12 +39,24 @@ public class Plato {
 
     }
 
+    @NotNull(message = "El ID no puede ser nulo")
+    @Size(min = 1, message = "El Id debe tener como mínimo 1 carácter")
     @Schema(description = "Id del plato")
     private Integer id;
+
+    @NotNull(message = "El nombre no puede ser nulo")
+    @Size(min = 3, message = "El nombre debe tener como mínimo 3 caracteres")
     @Schema(description = "Nombre del plato")
     private String nombre;
+
+    @NotNull(message = "El precio no puede ser nulo")
+    @Size(min = 1, message = "El costo tiene que tener mínimo un caracter")
     @Schema(description = "Precio del plato")
     private double precio;
+
+    @NotNull(message = "La categoría del plato no puede ser nula")
+    @Size(min = 1, max = 1, message = "Solo hay 3 categorías de 1 carácter cada una, " +
+            "por lo que la categoría del plato va a tener siempre un caracter")
     @Schema(description = "Categoria del plato")
     private Categoria categoria;
 
